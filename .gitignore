@@ -1,0 +1,32 @@
+# Docker-specific ignore patterns
+.dockerignore
+.docker
+
+# Ignore Docker build artifacts
+*.dockerfile
+*.tar
+*.gz
+*.zip
+
+# Ignore Docker image files
+*.img
+*.iso
+
+# Ignore Docker logs and other runtime files
+logs/
+*.log
+
+# Ignore development environment files
+.env
+.env.local
+.env.*.local
+
+# Ignore Node.js dependencies (if using a build process)
+node_modules/
+
+# Ignore build output and generated files
+build/
+dist/
+public/
+.tmp/
+tmp/
