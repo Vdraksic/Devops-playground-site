@@ -1,0 +1,29 @@
+name: Docker CVE
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Scan current project
+      uses: anchore/scan-action@v3
+      with:
+        path: "."
+
+    - name: Build the image
+      run: docker build . --tag localbuild/image:latest
+    
+    - name: Scan image  
+      uses: anchore/scan-action@v3
+      with:
+        image: "localbuild/image:latest"
+        fail-build: "false"     
+    
+    - name: Inspect report
+      run: cat ${{ steps.scan.outputs.sarif}}    
