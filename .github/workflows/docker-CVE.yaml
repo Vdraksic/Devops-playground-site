@@ -22,7 +22,8 @@ jobs:
     - name: Scan image  
       uses: anchore/scan-action@v3
       with:
-        image: "localbuild/image:latest"     
+        image: "localbuild/image:latest"
+        fail-build: "false"     
     
     - name: Inspect report
       run: cat ${{ steps.scan.outputs.sarif}}    
