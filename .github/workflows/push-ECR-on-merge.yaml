@@ -8,7 +8,7 @@ on:
       - 'dockerfile'
       - 'site/**'  
   workflow_dispatch:
-    
+
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
@@ -24,16 +24,26 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: eu-south-1
 
-    - name: Build and push Docker image
-      env:
-        ECR_REPOSITORY: dpecr
-      run: |
-        docker build -t $ECR_REPOSITORY:${{ github.sha }} .
-        docker tag $ECR_REPOSITORY:${{ github.sha }} $ECR_REPOSITORY:latest
-        docker push $ECR_REPOSITORY:${{ github.sha }}
-        docker push $ECR_REPOSITORY:latest
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1    
 
-    - name: Slack notification on success or failure 
+    - name: Build, tag and push Docker image
+      env:
+        REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        REPOSITORY: dpecr
+        IMAGE_TAG: ${{ github.sha }}
+      run: |
+        docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
+        docker push $REGISTRY/$REPOSITORY:$IMAGE_TA
+  
+  slack_notification: 
+    needs: [build-and-push]   
+    if: failure()  
+    runs-on: ubuntu-latest
+
+    steps:       
+    - name: Slack notification on failure 
       uses: ravsamhq/notify-slack-action@v2
       with:
         status: ${{ job.status }}
