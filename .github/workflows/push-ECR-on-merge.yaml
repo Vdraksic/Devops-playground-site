@@ -35,15 +35,10 @@ jobs:
         IMAGE_TAG: ${{ github.sha }}
       run: |
         docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
-        docker push $REGISTRY/$REPOSITORY:$IMAGE_TA
-  
-  slack_notification: 
-    needs: [build-and-push]   
-    if: failure()  
-    runs-on: ubuntu-latest
-
-    steps:       
-    - name: Slack notification on failure 
+        docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
+   
+    - name: Slack notification on success or fail
+      if: always()
       uses: ravsamhq/notify-slack-action@v2
       with:
         status: ${{ job.status }}
