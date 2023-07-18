@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-and-push:
+  CVE-scan:
     runs-on: ubuntu-latest
 
     steps:
@@ -20,10 +20,12 @@ jobs:
       run: docker build . --tag localbuild/image:latest
     
     - name: Scan image  
+      id: scan
       uses: anchore/scan-action@v3
       with:
         image: "localbuild/image:latest"
         fail-build: "false"     
-    
+        output-format: "sarif"
+            
     - name: Inspect report
-      run: cat ${{ steps.scan.outputs.sarif}}    
+      run: cat ${{ steps.scan.outputs.sarif }}   
