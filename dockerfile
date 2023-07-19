@@ -1,6 +1,6 @@
 FROM klakegg/hugo:latest as build
 
-COPY /site /src
+COPY ./site /src
 
 RUN hugo --source=/src --destination=/usr/share/nginx/html 
 
