@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   site:
-    image: test
+    image: "{{ DOCKER_IMAGE }}"
     ports:
     - 80:80
     - 443:443
