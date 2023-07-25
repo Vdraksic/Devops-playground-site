@@ -5,13 +5,14 @@ services:
     image: test
     ports:
     - 80:80
-    - 433:433
+    - 443:443
     restart: always
     volumes:
       - ./nginx/conf/:/etc/nginx/conf.d:ro
       - ./certbot/www:/var/www/certbot:ro
-
+      - ./certbot/conf/:/etc/nginx/ssl/:ro
   certbot:
     image: certbot/certbot:latest
     volumes:
-      - ./certbot/www/:/var/www/certbot:rw    
+      - ./certbot/www/:/var/www/certbot:rw  
+      - ./certbot/conf/:/etc/letsencrypt/:rw
