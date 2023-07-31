@@ -10,7 +10,7 @@ services:
     volumes:
       - ./nginx/conf/:/etc/nginx/conf.d:ro # nginx conf
       - ./certbot/conf/:/etc/nginx/ssl/:ro # ssl cert
-      - ./nginx/log/:/var/log/nginx:rw # nginx logs
+      - /var/log/nginx/:/var/log/nginx:rw # nginx logs
     env_file:
       - ./.env
   certbot:
